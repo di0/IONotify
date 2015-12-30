@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="com/develdio/services/|com/develdio/reminderappcore/services/connections/|com/develdio/reminderappcore/services/connections/|com/develdio/reminderappcore/services/connections/client/|com/develdio/reminderappcore/services/connections/server/|com/develdio/reminderappcore/services/connections/client/|com/develdio/reminderappcore/services/connections/server/|com/develdio/reminderappcore/services/connections/|com/develdio/reminderappcore/services/connections/client/|com/develdio/reminderappcore/services/connections/server/|com/develdio/reminderappcore/services/connections/|com/develdio/reminderappcore/services/connections/|com/develdio/reminderappcore/services/connections/" kind="src" path="core/src/main/java"/>
+	<classpathentry kind="src" path="core/src/test/java"/>
+	<classpathentry kind="src" path="system/src/main/java"/>
+	<classpathentry kind="src" path="system/src/test/java"/>
+	<classpathentry kind="src" path="core/src/main/java/com/develdio/reminderappcore/services/connections"/>
+	<classpathentry exported="true" kind="lib" path="core/target/core-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/core-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/hamcrest-all-1.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/hamcrest-core-1.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/junit-4.11.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/log4j-1.2.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/log4j-api-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/log4j-core-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/mockito-all-1.9.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/mysql-connector-java-5.1.28.jar"/>
+	<classpathentry exported="true" kind="lib" path="generate/target/reminderapp-1.0.1/system-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="system/target/system-1.0-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="system/target/system-1.0.1.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
