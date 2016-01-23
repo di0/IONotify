@@ -129,7 +129,7 @@ final public class PackageData implements IPackageData {
 			this.rsv3 = ( b & 0x10 );
 
 			this.isValidRsv = ( rsv1 != 0 && rsv2 != 0 && rsv3 != 0 );
-			this.opCode = ( ( (byte) ( b & 0xF ) ) );
+			this.opCode = ( (byte) ( b & 0xF ) );
 
 			return this;
 		}

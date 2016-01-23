@@ -7,16 +7,16 @@ import java.util.Map;
 
 public class ContainerEventHandle {
 
-	static private Map<EventTime, List<EventHandle<?>>> mapEvent =
-			new HashMap<EventTime, List<EventHandle<?>>>();
+	static private Map< EventTime, List< EventHandler<?> > > mapEvent =
+			new HashMap< EventTime, List< EventHandler< ? > > >();
 
-	public static void addFromQueue(EventTime name, List<EventHandle<?>> listOfEvent) {
-		ContainerEventHandle.mapEvent.put(name, listOfEvent);
+	public static void addFromQueue( EventTime name, List<EventHandler< ? > > listOfEvent ) {
+		ContainerEventHandle.mapEvent.put( name, listOfEvent );
 	}
 
-	public static List<? extends EventHandle<?>> getFromQueue() {
+	public static List< ? extends EventHandler< ? > > getFromQueue() {
 
-		EventHandle<?> e = new EventHandle<String>() {
+		EventHandler< ? > e = new EventHandler< String >() {
 
 			public String capture() {
 				return "New Task";
@@ -31,8 +31,8 @@ public class ContainerEventHandle {
 			}
 		};
 
-		List<EventHandle<?>> listOfEventHandle = new ArrayList<EventHandle<?>>();
-		listOfEventHandle.add(e);
+		List< EventHandler< ? > > listOfEventHandle = new ArrayList< EventHandler< ? > >();
+		listOfEventHandle.add( e );
 
 		return listOfEventHandle;
 	}

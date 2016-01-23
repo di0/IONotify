@@ -4,7 +4,7 @@
   <groupId>com.develdio.reminderappcore</groupId>
   <artifactId>reminderapp-core</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.13</version>
+  <version>1.0.1</version>
   <name>reminderapp-core</name>
   <url>http://maven.apache.org</url>
 

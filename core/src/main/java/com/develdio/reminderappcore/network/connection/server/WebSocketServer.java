@@ -162,6 +162,7 @@ final public class WebSocketServer extends AsyncService implements Server {
 	}
 
 	public void run() {
+
 		if ( isRunning() )
 		{
 			while ( isRunning() )
@@ -169,8 +170,8 @@ final public class WebSocketServer extends AsyncService implements Server {
 				try
 				{
 					selector.select();
-					Set<SelectionKey> keys = selector.selectedKeys();
-					Iterator<SelectionKey> iter = keys.iterator();
+					Set< SelectionKey > keys = selector.selectedKeys();
+					Iterator< SelectionKey > iter = keys.iterator();
 	
 					while ( iter.hasNext() )
 					{
@@ -314,6 +315,7 @@ final public class WebSocketServer extends AsyncService implements Server {
 	}
 
 	public void send( ByteBuffer buffer, boolean yesNo ) {
+
 		if ( WebSocketServer.ALREADY_HANDSHAKE == false )
 		{
 			buffer.put( HandShake.prepareResponse().getBytes() );

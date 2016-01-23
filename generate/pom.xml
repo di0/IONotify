@@ -12,7 +12,7 @@
 	<groupId>com.develdio.reminderappcore</groupId>
 	<artifactId>reminderapp-core</artifactId>
         <type>jar</type>
-	<version>1.0.3</version>
+	<version>1.0.1</version>
     </dependency>
     <dependency>
         <groupId>com.develdio.reminderappsystem</groupId>

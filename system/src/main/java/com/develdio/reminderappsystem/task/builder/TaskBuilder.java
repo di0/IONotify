@@ -32,7 +32,8 @@ public final class TaskBuilder implements MessageTask {
 
 	private String scheduleDate = "";
 
-	private TaskBuilder(TaskBuilderMake m) {
+	private TaskBuilder( TaskBuilderMake m ) {
+
 		description = m.description;
 		identification = m.identification;
 		content = m.content;
@@ -71,19 +72,20 @@ public final class TaskBuilder implements MessageTask {
 		private String content = "";
 		private String scheduleDate = "";
 
-		public TaskBuilderMake(Message message) {
+		public TaskBuilderMake( Message message ) {
 			this.message = message;
 		}
 
 		public TaskBuilder create() {
+
 			this.description = message.getSubject();
 			this.identification = message.getID();
 			this.content = message.getContent();
 
-			DateFormat gmtFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-			this.scheduleDate = gmtFormat.format(message.getStart());
+			DateFormat gmtFormat = new SimpleDateFormat( "yyyy-mm-dd hh:mm:ss" );
+			this.scheduleDate = gmtFormat.format( message.getStart() );
 
-			return new TaskBuilder(this);
+			return new TaskBuilder( this );
 		}
 	}
 }

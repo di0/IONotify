@@ -3,13 +3,13 @@ package com.develdio.reminderappcore.services.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.develdio.reminderappcore.events.EventHandle;
+import com.develdio.reminderappcore.events.EventHandler;
 import com.develdio.reminderappcore.services.Service;
 import com.develdio.reminderappcore.services.async.DeliveryAsyncService;
 
 class ContainerEventHandle {
-	public static List<? extends EventHandle<?>> getList() {
-		EventHandle<?> e = new EventHandle<String>() {
+	public static List<? extends EventHandler<?>> getList() {
+		EventHandler<?> e = new EventHandler<String>() {
 			public String capture() {
 				return "New Task";
 			}
@@ -23,7 +23,7 @@ class ContainerEventHandle {
 			}
 		};
 
-		List<EventHandle<?>> listOfEventHandle = new ArrayList<EventHandle<?>>();
+		List<EventHandler<?>> listOfEventHandle = new ArrayList<EventHandler<?>>();
 		listOfEventHandle.add(e);
 
 		return listOfEventHandle;
@@ -35,13 +35,13 @@ class TestDeliveryServiceSync extends DeliveryAsyncService {
 		super(o);
 	}
 
-	public void onEventHandle(List<? extends EventHandle<?>> listOfEventHandle) {
-		for (EventHandle<?> EventHandle : listOfEventHandle)
+	public void onEventHandle(List<? extends EventHandler<?>> listOfEventHandle) {
+		for (EventHandler<?> EventHandle : listOfEventHandle)
 			log("Task: -> " + EventHandle.capture());
 	}
 
 	@Override
-	public void onEvent(List<? extends EventHandle<?>> EventHandle) {
+	public void onEvent(List<? extends EventHandler<?>> EventHandle) {
 	}
 }
 

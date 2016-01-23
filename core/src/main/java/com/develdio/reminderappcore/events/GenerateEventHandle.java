@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.develdio.reminderappcore.message.Message;
 import com.develdio.reminderappcore.message.MessageDisplay;
@@ -16,23 +17,27 @@ import com.develdio.reminderappcore.message.exception.MessageException;
 public class GenerateEventHandle {
 
 	final private MessageReader messageReader;
+
 	final private MessageDisplay messageDisplay;
-	final private  List<EventHandle<?>> listOfEventHandle = new ArrayList<EventHandle<?>>();
+
+	final private  List< EventHandler< ? > > listOfEventHandle =
+			new ArrayList< EventHandler< ? > >();
 
 	private GenerateEventHandle() {
 		messageReader = new MessageReaderImpl();
-		messageDisplay = new MessageDisplayImpl(messageReader);
+		messageDisplay = new MessageDisplayImpl( messageReader );
 	}
 
-	private GenerateEventHandle(DateFormat dateFormat) {
+	private GenerateEventHandle( DateFormat dateFormat ) {
 		this();
 
 		try
 		{
-			List<Message> listOfMessage = messageDisplay
-					.displayListMessageByDate(dateFormat.format(new Date()));
-			for ( final Message message : listOfMessage ) {
-				EventHandle<?> event = new EventHandle<String>() {
+			List< Message > listOfMessage = messageDisplay
+					.displayListMessageByDate( dateFormat.format( new Date() ) );
+			for ( final Message message : listOfMessage )
+			{
+				EventHandler< ? > event = new EventHandler< String >() {
 
 					@Override
 					public String capture() {
@@ -50,26 +55,26 @@ public class GenerateEventHandle {
 					}
 				};
 
-				listOfEventHandle.add(event);
+				listOfEventHandle.add( event );
 			}
 		}
-		catch (MessageException me)
+		catch ( MessageException me )
 		{
 		}
 	}
 
-	public static GenerateEventHandle byTime(EventTime eventTime) throws Exception {
-		switch (eventTime)
+	public static GenerateEventHandle byTime( EventTime eventTime ) throws Exception {
+		switch ( eventTime )
 		{
 			case NOW:
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				return new GenerateEventHandle(dateFormat);
+				DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+				return new GenerateEventHandle( dateFormat );
 			default:
-				throw new Exception("Time not found");
+				throw new Exception( "Time not found" );
 		}
 	}
 
-	public List<EventHandle<?>> getList() {
+	public List< EventHandler< ? > > getList() {
 		return listOfEventHandle;
 	}
 }

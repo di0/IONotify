@@ -22,23 +22,24 @@ import java.util.List;
 import java.util.Map;
 
 import com.develdio.reminderappcore.events.ContainerEventHandle;
-import com.develdio.reminderappcore.events.EventHandle;
+import com.develdio.reminderappcore.events.EventHandler;
 import com.develdio.reminderappcore.events.EventTime;
 import com.develdio.reminderappcore.events.GenerateEventHandle;
 
 public abstract class FetchAsyncService extends AsyncService {
+
 	// Delivery monitor side
 	private final Object deliveryMonitor;
 
 	// Event cached
-	private final Map<String, String> eventProcessed = new HashMap<String, String>();
+	private final Map< String, String > eventProcessed = new HashMap< String, String >();
 
-	public FetchAsyncService(Object deliveryMonitor) {
+	public FetchAsyncService( Object deliveryMonitor ) {
 		this.deliveryMonitor = deliveryMonitor;
 	}
 
 	final public void start() {
-		new Thread(this).start();
+		new Thread( this ).start();
 	}
 
 	final public void stop() {
@@ -49,40 +50,42 @@ public abstract class FetchAsyncService extends AsyncService {
 		return AsyncService.hasStarted;
 	}
 
-	final public void run() {
+	public void run() {
 		fetch();
 	}
 
 	private void fetch() {
+
 		if ( isRunning() )
 		{
-			log("Async fetch running");
+			log( "Async fetch running" );
 			while ( isRunning() )
 			{
-				synchronized (deliveryMonitor) {
+				synchronized ( deliveryMonitor )
+				{
 					try
 					{
 						GenerateEventHandle generateEvent = GenerateEventHandle
-								.byTime(EventTime.NOW);
-						List<EventHandle<?>> listOfEventHandle = generateEvent.getList();
-						removeEventAlreadyFetched(listOfEventHandle);
-						if ( listOfEventHandle.isEmpty() )
-							Thread.sleep(600);
+								.byTime( EventTime.NOW );
+						List< EventHandler < ? > > listOfEventHandler = generateEvent.getList();
+						removeEventAlreadyFetched( listOfEventHandler );
+						if ( listOfEventHandler.isEmpty() )
+							Thread.sleep( 600 );
 						else
 						{
-							log("Event found");
+							log( "Event found" );
 							// Get event from Container
 							ContainerEventHandle
-									.addFromQueue(EventTime.NOW, listOfEventHandle);
+									.addFromQueue( EventTime.NOW, listOfEventHandler );
 							// Notify Delivery side about
 							deliveryMonitor.notify();
 						}
 					}
-					catch (InterruptedException ie)
+					catch ( InterruptedException ie )
 					{
 						log( ie.getMessage() );
 					}
-					catch (Exception e)
+					catch ( Exception e )
 					{
 						log( e.getMessage() );
 					}
@@ -91,17 +94,21 @@ public abstract class FetchAsyncService extends AsyncService {
 		}
 	}
 
-	private void removeEventAlreadyFetched(List<EventHandle<?>> listOfEventHandle) {
-		for ( Iterator<EventHandle<?>> iteratorEvent = listOfEventHandle.iterator(); iteratorEvent.hasNext(); )
+	private void removeEventAlreadyFetched( List< EventHandler< ? > > listOfEventHandle ) {
+
+		for ( Iterator< EventHandler< ? > > iteratorEvent  = listOfEventHandle.iterator();
+				iteratorEvent.hasNext(); )
 		{
-			EventHandle<?> eventHandle = iteratorEvent.next();
-			if (eventHandle.getIdentification().equals(eventProcessed.get(eventHandle.getIdentification())))
+			EventHandler< ? > eventHandle = iteratorEvent.next();
+			if ( eventHandle.getIdentification()
+					.equals( eventProcessed.get( eventHandle.getIdentification() ) ) )
 			{
 				iteratorEvent.remove();
 			}
 			else
 			{
-				eventProcessed.put(eventHandle.getIdentification(), eventHandle.getIdentification());
+				eventProcessed.put( eventHandle.getIdentification(),
+						eventHandle.getIdentification() );
 			}
 		}
 	}

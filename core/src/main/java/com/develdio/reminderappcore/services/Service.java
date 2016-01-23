@@ -38,14 +38,14 @@ public abstract class Service {
 		else
 		{
 			identifier = c.getName();
-			log = LogManager.getLogger(c.getName());
+			log = LogManager.getLogger( c.getName() );
 		}
 	}
 
 	public void exec(Action action) throws Exception {
-		if (action == Action.S_START)
+		if ( action == Action.S_START )
 			startService();
-		if (action == Action.S_STOP)
+		if ( action == Action.S_STOP )
 			stopService();
 	}
 
@@ -53,11 +53,11 @@ public abstract class Service {
 	 * Starts this service.
 	 */
 	private void startService() throws Exception {
-		if (Service.hasStarted)
+		if ( Service.hasStarted )
 		{
 			String mError = "Service is already running";
-			log(mError);
-			throw new Exception(mError);
+			log( mError );
+			throw new Exception( mError );
 		}
 
 		start();
@@ -67,11 +67,11 @@ public abstract class Service {
 	 * Closes communication of this Service
 	 */
 	private void stopService() throws Exception {
-		if (Service.hasStopped)
+		if ( Service.hasStopped )
 		{
 			String mError = "Service is not running";
-			log.warn(mError);
-			throw new Exception(mError);
+			log.warn( mError );
+			throw new Exception( mError );
 		}
 
 		stop();
@@ -92,8 +92,7 @@ public abstract class Service {
 		stop();
 	}
 
-	final public void log(String notice) {
-		Log.getLogInstance(AsyncService.class).logDebug(notice);
+	final public void log( String notice ) {
+		Log.getLogInstance( AsyncService.class ).logDebug( notice );
 	}
-
 }
