@@ -17,6 +17,7 @@
 package com.develdio.reminderappcore.network.common;
 
 import java.nio.ByteBuffer;
+import java.math.BigInteger;
 
 /**
  * Class read-only that can represent the Package Data of multiples
@@ -116,7 +117,6 @@ final public class PackageData implements IPackageData {
 		}
 
 		public PackageDataBuilder withFinRsvAndOpcode() {
-			// TODO reset buffer
 			byte b = buffer.get();
 
 			// The fin field
@@ -155,15 +155,19 @@ final public class PackageData implements IPackageData {
 			}
 
 			// Decode Payload Length
-			int payloadLengthContinued = 0x0;
-			while ( --byteExtra >= 0 )
+			int i = 1;
+			byte[] sizebytes = new byte[ 3 ];
+			boolean f = false;
+			while ( --byteExtra > 0 )
 			{
-				b = this.buffer.get();
-				payloadLengthContinued |= ( b  & 0xFF );
+				sizebytes[ i ] = buffer.get();
+				sizebytes[ i + 1 ] = buffer.get();
+				i++;
+				f = true;
 			}
-
-			if ( payloadLengthContinued != 0 )
-				this.payloadLength = payloadLengthContinued;
+			if ( f ) {
+				payloadLength = new BigInteger( sizebytes ).intValue();
+			}
 
 			return this;
 		}

@@ -372,7 +372,7 @@ final public class WebSocketServer extends AsyncService implements Server {
 
 					// Sends message 
 					String charbuffer =
-							new String (payload.getPayload() , Charset.forName( "UTF-8" ) );
+							new String ( payload.getPayload() , Charset.forName( "UTF-8" ) );
 					wsListener.onMessage( charbuffer );
 				}
 			}

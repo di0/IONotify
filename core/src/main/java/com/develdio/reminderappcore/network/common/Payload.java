@@ -36,23 +36,27 @@ final public class Payload implements IPayload {
 	}
 
 	public void configurePayload( ByteBuffer buffer ) {
+
 		int payloadLength = packageData.getPayloadLength();
 
+		byte[] maskingKey = new byte[ 4 ];
+		ByteBuffer payload = ByteBuffer.allocate( 4024 );
 		if ( packageData.isMasked() )
 		{
-			byte[] maskingKey = new byte[ 4 ];
+			maskingKey = new byte[ 4 ];
 			buffer.get( maskingKey, 0, 4 );
-
-			byte[] payload = new byte[ payloadLength ];
-			buffer.get( payload, 0, payloadLength );
-
 			for ( int i = 0; i < payloadLength; i++ )
 			{
-				payload[ i ] ^= maskingKey[ i % 4 ];
+				payload.put( (byte) ( (byte) buffer.get() ^ (byte) maskingKey[ i % 4 ] ) );
 			}
-
-			this.payload = payload;
 		}
+		else
+		{
+			payload.put( buffer.array(), buffer.position(), payload.limit() );
+			buffer.position( buffer.position() + payload.limit() );
+		}
+
+		this.payload = payload.array();
 	}
 
 	public byte[] getPayload() {

@@ -11,36 +11,36 @@ import com.develdio.reminderappcore.util.Base64;
 
 public class HandShake {
 
-	public static Map<String, String> clientHeader = new HashMap<String, String>();
-	public static Map<String, String> serverHeader = new HashMap<String, String>();
+	public static Map< String, String > clientHeader = new HashMap< String, String >();
+	public static Map< String, String > serverHeader = new HashMap< String, String >();
 
-	public static Map<String, String> translateHeaderHttp(ByteBuffer buf, String who) {
+	public static Map< String, String > translateHeaderHttp( ByteBuffer buf, String who ) {
 
 		String line = readStringLine( buf );
 		line = readStringLine( buf );
 
-		while ( line != null && line.length() > 0 )
+		while ( ( line != null ) && ( line.length() > 0 ) )
 		{
 			String[] pair = line.split( ":", 2 );
 			if ( pair.length != 2 )
 			{
 				// TODO lancar excecao.
 				System.out.println( "Error" );
-				System.exit(1);
+				System.exit( 1 );
 			}
-			if ( "client".equalsIgnoreCase(who))
+			if ( "client".equalsIgnoreCase( who ) )
 				clientHeader.put( pair[ 0 ], pair[ 1 ].replaceFirst( "^ +", "" ) );
 			else
 				serverHeader.put( pair[ 0 ], pair[ 1 ].replaceFirst( "^ +", "" ) );
 			line = readStringLine( buf );
 		}
 
-		if ("client".equalsIgnoreCase(who))
+		if ( "client".equalsIgnoreCase( who ) )
 			return clientHeader;
 		return serverHeader;
 	}
 
-	public static Map<String, String> getHeaderHttpFromClient() {
+	public static Map< String, String > getHeaderHttpFromClient() {
 		return HandShake.clientHeader;
 	}
 

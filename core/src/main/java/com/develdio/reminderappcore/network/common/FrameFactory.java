@@ -31,7 +31,7 @@ final public class FrameFactory {
 	public static Frame createFrame( ByteBuffer buffer ) {
 
 		// Frame values representation
-		FrameVO frameVO  = new FrameVO();
+		FrameVO frameVO = new FrameVO();
 
 		// octet with FIN, RSV and OPCODE
 		IPackageData firstPart = new PackageData
