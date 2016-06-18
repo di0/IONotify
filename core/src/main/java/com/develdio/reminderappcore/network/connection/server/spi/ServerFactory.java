@@ -7,4 +7,10 @@ public class ServerFactory {
 	public static Server createServer() {
 		return new WebSocketServer();
 	}
+
+	public static Server createServer( String hostname, int port ) 
+			throws Exception {
+
+		return new WebSocketServer( hostname, port );
+	}
 }

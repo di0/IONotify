@@ -105,6 +105,11 @@ public abstract class ServerProxyAsyncService extends AsyncService implements Se
 	}
 
 	@Override
+	public void send( String message ) {
+		server.send( message );
+	}
+
+	@Override
 	public List<?> queue() {
 		return server.queue();
 	}

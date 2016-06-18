@@ -72,14 +72,16 @@ final public class WebSocketServer extends AsyncService implements Server {
 	private InetSocketAddress hostServer;
 
 	// Default Address
-	private static String host = "localhost";
+	private String host = "localhost";
+
+	// Default Port
+	private int port = 3338;
 
 	private Selector selector;
 
-	// Default Port
-	private static int port = 3338;
-
 	public static int i = 1;
+
+	public static String OPCODE_TEXT = "0";
 
 	/**
 	 * Initial all configuration to connect a remote foreign Service
@@ -111,7 +113,7 @@ final public class WebSocketServer extends AsyncService implements Server {
 	 * Create with default configuration.
 	 */
 	public WebSocketServer() {
-		this( new InetSocketAddress( host, port ) );
+		this( new InetSocketAddress( "localhost", 3338 ) );
 	}
 
 	public void start() {
@@ -301,7 +303,8 @@ final public class WebSocketServer extends AsyncService implements Server {
 			}
 			String charbuffer =
 					new String ( o, Charset.forName( "UTF-8" ) );
-			wsListener.onNotify( "Messagem enviada " + charbuffer );
+			wsListener.onNotify( "Sending message " + charbuffer );
+			queue.add( buffer );
 
 			/*
 			ByteBuffer newBuffer = ByteBuffer.allocate( 1000 );
@@ -312,6 +315,50 @@ final public class WebSocketServer extends AsyncService implements Server {
 			}
 			outQueue.add( buffer );*/
 		//}
+	}
+
+	public void send( String message ) {
+
+		log( "Sending message: " + message );
+		ByteBuffer buffer = ByteBuffer.allocate( ( message.length() + 4024 ) );
+
+		buffer.put( (byte) 0x81 );
+
+		if ( ( message.length() > 0 ) && ( message.length() <= 125 ) )
+		{
+			buffer.put( (byte) message.length() );
+			buffer.put( message.getBytes() );
+		}
+		else
+		{
+			if ( ( message.length() >= 0x7e ) && ( message.length() <= 0xffff ) )
+			{
+				buffer.put( (byte) 0x7e );
+
+				buffer.put( (byte) ( message.length() >> 0x8 ) );
+				buffer.put( (byte) ( message.length() & 0xff ) );
+
+				buffer.put( message.getBytes() );
+			}
+			else if ( message.length() >= 0x10000 )
+			{
+				buffer.put( (byte) 0x7f );
+
+				buffer.put( (byte) 0x0 );
+				buffer.put( (byte) 0x0 );
+				buffer.put( (byte) 0x0 );
+				buffer.put( (byte) 0x0 );
+				buffer.put( (byte) 0x0 );
+				buffer.put( (byte) 0x0 );
+				buffer.put( (byte) 0x0 );
+				buffer.put( (byte) message.length() );
+
+				buffer.put( message.getBytes() );
+			}
+		}
+
+		buffer.flip();
+		queue.add( buffer );
 	}
 
 	public void send( ByteBuffer buffer, boolean yesNo ) {
@@ -370,10 +417,13 @@ final public class WebSocketServer extends AsyncService implements Server {
 					IPayload payload = frame.getPayload();
 					wsListener.onNotify( "Size payload: " + frame.getPayloadLength() );
 
-					// Sends message 
-					String charbuffer =
-							new String ( payload.getPayload() , Charset.forName( "UTF-8" ) );
-					wsListener.onMessage( charbuffer );
+					if ( WebSocketServer.OPCODE_TEXT.equals( "1" ) )
+					{
+						// Sends message 
+						String charbuffer =
+								new String ( payload.getPayload() , Charset.forName( "UTF-8" ) );
+						wsListener.onMessage( charbuffer );
+					}
 				}
 			}
 		}
@@ -430,9 +480,25 @@ final public class WebSocketServer extends AsyncService implements Server {
 			wsListener.onNotify( "Client was disconnected" );
 		}
 
+		if ( opCode == 0x9 )
+		{
+			wsListener.onNotify( "Client is pinging" );
+		}
+
+		if ( opCode == 0x0 )
+		{
+			wsListener.onNotify( "Continuation frame" );
+		}
+
+		if ( opCode == 0x2 )
+		{
+			wsListener.onNotify( "Binary frame" );
+		}
+
 		if ( opCode == 0x1 )
 		{
-			wsListener.onNotify( "Client is pinging ");
+			WebSocketServer.OPCODE_TEXT = "1";
+			wsListener.onNotify( "Text frame" );
 		}
 	}
 

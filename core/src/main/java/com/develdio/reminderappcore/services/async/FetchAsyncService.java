@@ -67,7 +67,7 @@ public abstract class FetchAsyncService extends AsyncService {
 					{
 						GenerateEventHandle generateEvent = GenerateEventHandle
 								.byTime( EventTime.NOW );
-						List< EventHandler < ? > > listOfEventHandler = generateEvent.getList();
+						List<EventHandler<?>> listOfEventHandler = generateEvent.getList();
 						removeEventAlreadyFetched( listOfEventHandler );
 						if ( listOfEventHandler.isEmpty() )
 							Thread.sleep( 600 );

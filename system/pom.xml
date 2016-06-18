@@ -52,7 +52,7 @@
 
    <dependency>
        <groupId>com.develdio.reminderappcore</groupId>
-       <artifactId>reminderappcore</artifactId>
+       <artifactId>reminderapp-core</artifactId>
        <version>1.0.1</version>
   </dependency>
 

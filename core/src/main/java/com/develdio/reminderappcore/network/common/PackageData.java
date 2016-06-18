@@ -135,13 +135,14 @@ final public class PackageData implements IPackageData {
 		}
 
 		public PackageDataBuilder withMaskAndPayloadLength() {
+
 			byte b = this.buffer.get();
 
 			// The masked field
 			this.mask = ( b & -0x80 );
 			this.isMasked =  ( ( b & -0x80 ) != 0 );
 
-			// The payload lenght field
+			// The payload length field
 			this.payloadLength = ( (byte) ( b & ~ (byte) 0x80 ) );
 
 			int byteExtra = 0x0;

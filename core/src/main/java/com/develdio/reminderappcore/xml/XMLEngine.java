@@ -44,7 +44,7 @@ public final class XMLEngine implements XMLSchema {
 
 	private ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-	public XMLEngine(Object o) {
+	public XMLEngine( Object o ) {
 		try {
 			// Structure class to XML construct
 			this.clazz = o.getClass();
@@ -64,9 +64,10 @@ public final class XMLEngine implements XMLSchema {
 			StartDocument startDocument = eventFactory.createStartDocument();
 			eventWriter.add(startDocument);
 			eventWriter.add(end);
-
-		} catch (XMLStreamException xse) {
-			log(xse.getMessage());
+		}
+		catch (XMLStreamException xse)
+		{
+			log( xse.getMessage() );
 		}
 	}
 
@@ -74,92 +75,105 @@ public final class XMLEngine implements XMLSchema {
 		return baos.toString();
 	}
 
-	final public void createTagOpen(String tagOpen) {
-		try {
+	final public void createTagOpen( String tagOpen ) {
+		try
+		{
 			this.tagOpen = tagOpen;
 
 			// create config open tag
 			StartElement startElement = eventFactory
-					.createStartElement("", "", this.tagOpen);
-			eventWriter.add(startElement);
-			eventWriter.add(end);
-		} catch (XMLStreamException xse) {
-			log(xse.getMessage());
+					.createStartElement( "", "", this.tagOpen );
+			eventWriter.add( startElement );
+			eventWriter.add( end);
+		}
+		catch ( XMLStreamException xse )
+		{
+			log( xse.getMessage() );
 		}
 	}
 
-	final public void createTagClose(String tagClose) {
-		try {
+	final public void createTagClose( String tagClose ) {
+		try
+		{
 			this.tagClose = tagClose;
 
 			// create confi close tag
 			EndElement endElement = eventFactory
-					.createEndElement("", "", this.tagClose);
-			eventWriter.add(endElement);
-			eventWriter.add(end);
-			eventWriter.add(eventFactory.createEndDocument());
+					.createEndElement( "", "", this.tagClose );
+			eventWriter.add( endElement );
+			eventWriter.add( end );
+			eventWriter.add( eventFactory.createEndDocument() );
 			eventWriter.close();
-		} catch (XMLStreamException xse) {
-			log(xse.getMessage());
+		} catch ( XMLStreamException xse ) {
+			log( xse.getMessage() );
 		}
 	}
 
 	final public void createNodesDocument() {
-		try {
-			Map<String, Method> mapOfNameMethod = createMapNameAndMethods();
-			for (Map.Entry<String, Method> entry : mapOfNameMethod.entrySet()) {
+		try
+		{
+			Map< String, Method > mapOfNameMethod = createMapNameAndMethods();
+			for ( Map.Entry<String, Method> entry : mapOfNameMethod.entrySet() )
+			{
 				String node = entry.getKey();
 				String content = (String) entry.getValue()
-						.invoke(this.o);
+						.invoke( this.o );
 				createNode(node, content);
 			}
 		}
-		catch (java.lang.IllegalAccessException iae) {
-			log(iae.getMessage());
+		catch ( java.lang.IllegalAccessException iae )
+		{
+			log( iae.getMessage() );
 		}
-		catch (java.lang.reflect.InvocationTargetException ite) {
-			log(ite.getMessage());
+		catch ( java.lang.reflect.InvocationTargetException ite )
+		{
+			log( ite.getMessage() );
 		}
 	}
 
-	private void createNode(String node, String content) {
-		try {
+	private void createNode( String node, String content ) {
+		try 
+		{
 			// Open node child
-			StartElement sElement = eventFactory.createStartElement("", "", node);
+			StartElement sElement = eventFactory.createStartElement( "", "", node );
 
-			eventWriter.add(tab);
-			eventWriter.add(sElement);
+			eventWriter.add( tab );
+			eventWriter.add( sElement );
 
 			 // Input content
-			Characters characters = eventFactory.createCharacters(content);
-			this.eventWriter.add(characters);
+			Characters characters = eventFactory.createCharacters( content );
+			this.eventWriter.add( characters );
 
 			// Close node child
-			EndElement eElement = eventFactory.createEndElement("", "", node);
-			this.eventWriter.add(eElement);
-			this.eventWriter.add(end);
+			EndElement eElement = eventFactory.createEndElement( "", "", node );
+			this.eventWriter.add( eElement );
+			this.eventWriter.add( end );
 
-		} catch (XMLStreamException e) {}
+		}
+		catch ( XMLStreamException e ) {}
 	}
 
-	private Map<String, Method> createMapNameAndMethods() {
-		Map<String, Method> mapOfNameMethod = new HashMap<String, Method>();
+	private Map< String, Method > createMapNameAndMethods() {
+		Map< String, Method > mapOfNameMethod = new HashMap< String, Method >();
 
 		Method[] methods = this.clazz.getMethods();
-		for (Method method : methods) {
-			String nameMethod = replaceNameFromMethod(method.getName());
-			if (!"".equals(nameMethod))
-				mapOfNameMethod.put(nameMethod, method);
+		for ( Method method : methods )
+		{
+			String nameMethod = replaceNameFromMethod( method.getName() );
+			if ( ! ( "".equals( nameMethod ) ) )
+				mapOfNameMethod.put( nameMethod, method );
 		}
 
 		return mapOfNameMethod;
 	}
 
 	private String replaceNameFromMethod(String nameMethod) {
-		if (nameMethod.startsWith("get") && !"getClass".equalsIgnoreCase(nameMethod)) {
-			nameMethod = nameMethod.replaceAll("get", "");
-			while (nameMethod.startsWith("_")) {
-				nameMethod = nameMethod.replaceAll("_", "");
+		if ( nameMethod.startsWith( "get" ) && ! "getClass".equalsIgnoreCase( nameMethod ) )
+		{
+			nameMethod = nameMethod.replaceAll( "get", "" );
+			while ( nameMethod.startsWith( "_" ) )
+			{
+				nameMethod = nameMethod.replaceAll( "_", "" );
 			}
 
 			return nameMethod;
@@ -168,7 +182,7 @@ public final class XMLEngine implements XMLSchema {
 		return "";
 	}
 
-	private void log(String message) {
-		Log.getLogInstance(XMLEngine.class).logDebug(message);
+	private void log( String message ) {
+		Log.getLogInstance(XMLEngine.class).logDebug( message );
 	}
 }

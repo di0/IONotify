@@ -11,6 +11,7 @@ public interface Server {
 	public boolean isClosed();
 	public void receive( ByteBuffer o );
 	public void send( ByteBuffer o );
+	public void send( String message );
 	public List<?> queue();
 	public int getPort();
 	public void listener( ServerListener serverListener );
