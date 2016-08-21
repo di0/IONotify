@@ -61,12 +61,12 @@ final public class WebSocketServer extends AsyncService implements Server {
 	private static boolean ALREADY_HANDSHAKE = false;
 
 	// Queue of the Message
-	public List< ByteBuffer > queue = new ArrayList< ByteBuffer >();
+	public List<ByteBuffer> queue = new ArrayList<ByteBuffer>();
 
 	// List that treat Message
-	final private List< Message > inQueue = new LinkedList< Message >();
+	final private List<Message> inQueue = new LinkedList<Message>();
 
-	final private List< ByteBuffer > outQueue = new LinkedList< ByteBuffer >();
+	final private List<ByteBuffer> outQueue = new LinkedList<ByteBuffer>();
 
 	// The endpoint server
 	private InetSocketAddress hostServer;
@@ -150,7 +150,7 @@ final public class WebSocketServer extends AsyncService implements Server {
 	public void close() {
 		try
 		{
-			if ( endpointIsLive() )
+			if ( endpointIsAlive() )
 				clientSockSide.close();
 			if ( serverSockSide.isOpen() )
 				serverSockSide.close();
@@ -172,9 +172,9 @@ final public class WebSocketServer extends AsyncService implements Server {
 				try
 				{
 					selector.select();
-					Set< SelectionKey > keys = selector.selectedKeys();
-					Iterator< SelectionKey > iter = keys.iterator();
-	
+					Set<SelectionKey> keys = selector.selectedKeys();
+					Iterator<SelectionKey> iter = keys.iterator();
+
 					while ( iter.hasNext() )
 					{
 						SelectionKey key = iter.next();
@@ -194,11 +194,11 @@ final public class WebSocketServer extends AsyncService implements Server {
 						// Read from endpoint
 						if ( key.isReadable() )
 						{
-							if ( endpointIsLive() )
+							if ( endpointIsAlive() )
 							{
 								wsListener.onNotify( "Service is reading " );
 								clientSockSide = (SocketChannel) key.channel();
-								ByteBuffer buffer = ByteBuffer.allocate( 1024 );
+								ByteBuffer buffer = ByteBuffer.allocate( 4024 );
 								clientSockSide.read( buffer );
 								receive( buffer );
 								clientSockSide.register( selector, SelectionKey.OP_WRITE );
@@ -211,7 +211,7 @@ final public class WebSocketServer extends AsyncService implements Server {
 
 						if ( key.isWritable() )
 						{
-							if ( endpointIsLive() )
+							if ( endpointIsAlive() )
 							{
 								ByteBuffer buffer = ByteBuffer.allocate( 1024 );
 								clientSockSide = (SocketChannel) key.channel();
@@ -456,7 +456,8 @@ final public class WebSocketServer extends AsyncService implements Server {
 		*/ 
 	}
 
-	private void connectWithEndPoint( SelectionKey key ) throws IOException {
+	private void connectWithEndPoint( SelectionKey key ) throws IOException
+	{
 		ServerSocketChannel serverSocket = (ServerSocketChannel) key.channel();
 		clientSockSide = serverSocket.accept();
 		if ( clientSockSide.isConnected() )
@@ -470,11 +471,13 @@ final public class WebSocketServer extends AsyncService implements Server {
 		clientSockSide.register( selector, SelectionKey.OP_READ );
 	}
 
-	private boolean endpointIsLive() {
+	private boolean endpointIsAlive()
+	{
 		return ( clientSockSide.isConnected() && clientSockSide.isOpen() );
 	}
 
-	private void treatOpcode( byte opCode ) {
+	private void treatOpcode( byte opCode )
+	{
 		if ( opCode == 0x8 )
 		{
 			wsListener.onNotify( "Client was disconnected" );
@@ -505,7 +508,8 @@ final public class WebSocketServer extends AsyncService implements Server {
 	/**
 	 * Class that work for Provider
 	 */
-	public class ProviderSyncServiceWorker extends Thread {
+	public class ProviderSyncServiceWorker extends Thread
+	{
 		@Override
 		public void run()
 		{

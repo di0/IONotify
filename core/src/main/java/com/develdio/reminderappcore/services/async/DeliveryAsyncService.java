@@ -12,7 +12,7 @@ public abstract class DeliveryAsyncService extends AsyncService {
 
 	final private Object fetchMonitor;
 
-	private List< ? extends EventHandler< ? > > listOfEventHandle = null;
+	private List<? extends EventHandler<?>> listOfEventHandle = null;
 
 	public DeliveryAsyncService( Object fetchMonitor ) {
 		this.fetchMonitor = fetchMonitor;
